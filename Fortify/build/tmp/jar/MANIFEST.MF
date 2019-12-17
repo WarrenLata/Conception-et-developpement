@@ -1,2 +1,18 @@
 Manifest-Version: 1.0
+Class-Path: file:/home/walid/.gradle/caches/modules-2/files-2.1/org.co
+ dehaus.groovy/groovy-all/2.3.11/f6b34997d04c1538ce451d3955298f46fdb4d
+ bd4/groovy-all-2.3.11.jar file:/home/walid/.gradle/caches/modules-2/f
+ iles-2.1/com.rometools/rome/1.12.2/eaa7a2025cd38a6678d96b2b78b4f7e68e
+ 3f8e36/rome-1.12.2.jar file:/home/walid/.gradle/caches/modules-2/file
+ s-2.1/com.google.code.gson/gson/2.8.5/f645ed69d595b24d4cf8b3fbb64cc50
+ 5bede8829/gson-2.8.5.jar file:/home/walid/.gradle/caches/modules-2/fi
+ les-2.1/org.slf4j/slf4j-api/1.7.16/3a6274f658487d5bfff9af3862beff6da1
+ e7fd52/slf4j-api-1.7.16.jar file:/home/walid/.gradle/caches/modules-2
+ /files-2.1/org.slf4j/slf4j-simple/1.7.16/f0cacc3d21e1027c82006a7a6f6c
+ f2cad86d2a4f/slf4j-simple-1.7.16.jar file:/home/walid/.gradle/caches/
+ modules-2/files-2.1/com.rometools/rome-utils/1.12.2/240dc40fb9333ac87
+ 2319e7d31178bffc63f7900/rome-utils-1.12.2.jar file:/home/walid/.gradl
+ e/caches/modules-2/files-2.1/org.jdom/jdom2/2.0.6/6f14738ec2e9dd0011e
+ 343717fa624a10f8aab64/jdom2-2.0.6.jar
+Main-Class: sample.Main
 

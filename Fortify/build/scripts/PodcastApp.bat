@@ -63,7 +63,7 @@ set CMD_LINE_ARGS=%*
 :execute
 @rem Setup the command line
 
-set CLASSPATH=%APP_HOME%\lib\PodcastApp-1.0-SNAPSHOT.jar;%APP_HOME%\lib\groovy-all-2.3.11.jar;%APP_HOME%\lib\rome-1.12.2.jar;%APP_HOME%\lib\gson-2.8.5.jar;%APP_HOME%\lib\slf4j-simple-1.7.16.jar;%APP_HOME%\lib\rome-utils-1.12.2.jar;%APP_HOME%\lib\slf4j-api-1.7.16.jar;%APP_HOME%\lib\jdom2-2.0.6.jar
+set CLASSPATH=%APP_HOME%\lib\PodcastApp-1.0-SNAPSHOT.jar;%APP_HOME%\lib\groovy-all-2.3.11.jar;%APP_HOME%\lib\rome-1.12.2.jar;%APP_HOME%\lib\gson-2.8.5.jar;%APP_HOME%\lib\slf4j-api-1.7.16.jar;%APP_HOME%\lib\slf4j-simple-1.7.16.jar;%APP_HOME%\lib\rome-utils-1.12.2.jar;%APP_HOME%\lib\jdom2-2.0.6.jar
 
 @rem Execute PodcastApp
 "%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %PODCAST_APP_OPTS%  -classpath "%CLASSPATH%" sample.Main %CMD_LINE_ARGS%
