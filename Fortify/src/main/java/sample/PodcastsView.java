@@ -41,7 +41,7 @@ public class PodcastsView  extends VBox implements Observer {
             PodcastProperties podcast_i=podcasttoadd.get(i);
             Label podcastname=new Label(podcast_i.getTitle());
             //ImageView image=new ImageView(new Image(podcasttoadd.get(i).getImageURL()));
-            ImageView image=new ImageView(new Image(new FileInputStream("/home/etudiants/hmiza2u/Bureau/315592.jpg")));
+            ImageView image=new ImageView(new Image(new FileInputStream("src/main/resources/images/315592.jpg")));
             Label podcastdesc=new Label("CODING WEAAKLY AND QUICKLY");
 
             ButtonPodDesc play_btn = new ButtonPodDesc("SHOW EPISODES",application,podcast_i);
