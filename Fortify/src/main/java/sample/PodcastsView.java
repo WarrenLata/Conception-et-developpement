@@ -2,14 +2,20 @@ package sample;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import Misc.ButtonPodDesc;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import model.Podcast;
 import model.PodcastApp;
 import model.PodcastProperties;
@@ -22,40 +28,74 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class PodcastsView  extends VBox implements Observer {
-    ObservableList<HBox> Podcastitems = FXCollections.observableArrayList();
-    ListView<HBox> listPodcasts=new ListView<HBox>(Podcastitems);
+    ObservableList<GridPane> Podcastitems = FXCollections.observableArrayList();
+    ListView<GridPane> listPodcasts=new ListView<GridPane>(Podcastitems);
 
     public PodcastsView (PodcastApp application) throws Exception {
 
-        this.setStyle("-fx-background-color:linear-gradient(to top, #1b56af, #1e4f9b, #204888, #234175, #243a62);");
-        Label PodcastsName=new Label("Podcast:");
-        this.getChildren().add(PodcastsName);
+        //this.setStyle("-fx-background-color:linear-gradient(to top, #1b56af, #1e4f9b, #204888, #234175, #243a62);");
+        Label PodcastsName=new Label("Podcasts:");
 
+        PodcastsName.setStyle("-fx-font-size:25px;-fx-text-fill: white; -fx-font-family: 'Trebuchet MS', Helvetica, sans-serif;");
+        this.getChildren().add(PodcastsName);
         //ListView
         ArrayList<PodcastProperties> podcasttoadd = application.getData();
 
 
         ///
         for (int i=0;i<podcasttoadd.size();i++){
-            HBox Container=new HBox();
+            GridPane Container=new GridPane();
             PodcastProperties podcast_i=podcasttoadd.get(i);
             Label podcastname=new Label(podcast_i.getTitle());
             //ImageView image=new ImageView(new Image(podcasttoadd.get(i).getImageURL()));
-            ImageView image=new ImageView(new Image(new FileInputStream("src/main/resources/images/315592.jpg")));
+            Image image=new Image(new FileInputStream("src/main/resources/images/315592.jpg"));
+            ImageView imageView = new ImageView(image);
             Label podcastdesc=new Label("CODING WEAAKLY AND QUICKLY");
+            VBox label_title_desc = new VBox();
+            Rectangle clip = new Rectangle();
+            clip.setHeight(image.getHeight());
+            clip.setWidth(image.getWidth());
+            System.out.println(image.getHeight());
+            clip.setArcWidth(15);
+            clip.setArcHeight(15);
+            imageView.setClip(clip);
+            SnapshotParameters parameters = new SnapshotParameters();
+            parameters.setFill(Color.TRANSPARENT);
+            WritableImage imageView1 = imageView.snapshot(parameters, null);
 
-            ButtonPodDesc play_btn = new ButtonPodDesc("SHOW EPISODES",application,podcast_i);
+            // remove the rounding clip so that our effect can show through.
+            imageView.setClip(null);
 
-            Container.getChildren().addAll(image,podcastname,podcastdesc,play_btn);
+            // apply a shadow effect.
+            imageView.setEffect(new DropShadow(20, javafx.scene.paint.Color.BLACK));
+
+            // store the rounded image in the imageView.
+            imageView.setImage(imageView1);
 
 
             Podcastitems.add(Container);
 
+            if (i%2==0) {
+                podcastname.setStyle("-fx-text-fill: black");
+                podcastdesc.setStyle("-fx-text-fill: black");
+                Container.setStyle("-fx-background-color: #FF9900;");
+            }else {
+                podcastname.setStyle("-fx-text-fill: orange");
+                podcastdesc.setStyle("-fx-text-fill: orange");
+                Container.setStyle("-fx-background-color: #171717;");
+            }
+            label_title_desc.getChildren().addAll(podcastname,podcastdesc);
+            ButtonPodDesc play_btn = new ButtonPodDesc("SHOW EPISODES",application,podcast_i);
+
+            imageView.setFitHeight(150);
+            imageView.setFitWidth(200);
+            Container.addRow(0,imageView,label_title_desc,play_btn);
+            Container.setHgap(10);
         }
         listPodcasts.setItems(Podcastitems);
-
+        listPodcasts.setStyle("-fx-background-color: #000000;");
         this.getChildren().add(listPodcasts);
-
+        listPodcasts.setStyle("-fx-background-color: linear-gradient(#328BDB 0%, #207BCF 25%, #1973C9 75%, #0A65BF 100%);");
 
 
     }
