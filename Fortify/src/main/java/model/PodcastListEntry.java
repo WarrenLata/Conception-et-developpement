@@ -1,5 +1,7 @@
 package model;
 
+import com.rometools.rome.feed.synd.SyndEntry;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,16 +12,31 @@ public class PodcastListEntry {
         return podcasts;
     }
 
-    public void addPodcast (String title, String URL, String author, String category, List<Episode> episodes) {
+    public void addPodcast (String title, String URL, String author, String category,String desciption,String imageURL , String language , List<Episode> episodes) {
       //  podcasts=new ArrayList<PodcastProperties>();
         PodcastProperties prop = new PodcastProperties();
         prop.setTitle(title);
-        System.out.println("YOOOO"+title);
+        System.out.println("Titre "+title);
         prop.setURL(URL);
+        System.out.println("URL "+title);
+
         prop.setAuthor(author);
+        System.out.println("author "+title);
+
+        prop.setDescription(desciption);
+        System.out.println("description "+title);
+
+        prop.setImageUrl(imageURL);
+        System.out.println("imageURL "+title);
+
+        prop.setLanguage(language);
+        System.out.println("language "+title);
+
         prop.setEpisodeList(episodes);
-        prop.setCategory(category);
+        System.out.println("episodes "+title);
+
         podcasts.add(prop);
+        System.out.println("Aadd sort");
     }
 
     public void removePodcast (int index) {
