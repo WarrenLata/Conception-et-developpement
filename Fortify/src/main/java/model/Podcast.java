@@ -16,12 +16,13 @@ public class Podcast implements RSSItem{
     private String title;
     private String URL;
     private String author;
-    private String imageURL="NONE";
-    private String desc="NONE";
+    private String imageURL;
+    private String description;
     private String category;
+    private String language;
     //  private List<SyndEntry> entries;
     private List<Episode> episodes;
-    private PodcastFinder feed;
+    public PodcastFinder feed;
 
     public Podcast (String URL) throws Exception {
         loadFeed(URL);
@@ -30,11 +31,20 @@ public class Podcast implements RSSItem{
 
     }
 
-    public String getDesc(){
-        return this.desc;
+
+    @Override
+    public String getLanguage(){
+        return language;
     }
+
+    @Override
+    public String getDescription(){
+        return description;
+    }
+
+    @Override
     public String getImageURL(){
-        return  this.imageURL;
+        return  imageURL;
     }
 
     @Override
@@ -56,16 +66,29 @@ public class Podcast implements RSSItem{
         return author;
     }
 
+
+    public void  setFeed(PodcastFinder p){
+        this.feed=p;
+    }
+
+
+
+
+
     @Override
     public List<Episode> getAllEpisodes () {
         return episodes;
     }
 
-    private void loadFeed (String URL) throws Exception {
-           feed = new PodcastFinder(URL);
+    public void loadFeed(String URL) throws Exception {
+        feed = new PodcastFinder(URL);
         title = feed.getTitle();
         author = feed.getForeignElementValue("author");
         episodes = getEntriesTitles();
+        imageURL=feed.getImageUrl();
+        description=feed.getDescription();
+        language=feed.getLangage();
+
     }
 
 
@@ -80,20 +103,20 @@ public class Podcast implements RSSItem{
             episodeListEntry.setName(entry.getTitle());
             episodeListEntry.setDescription(entry.getDescription().getValue());
 
-            final Element foreign = (Element) entry.getForeignMarkup().get(3);
+            //   final Element foreign = (Element) entry.getForeignMarkup().get(3);
             //System.out.println(foreign.getText());
 
 //      for (final Iterator foreignIterator = entry.getForeignMarkup().iterator(); foreignIterator.hasNext(); ) {
 //        final Element foreign = (Element) foreignIterator.next();
 //        System.out.println(foreign.get);
 //      }
-
+       /*
             for (final Iterator enclosureIterator = entry.getEnclosures().iterator(); enclosureIterator.hasNext(); ) {
                 final SyndEnclosureImpl enclosure = (SyndEnclosureImpl) enclosureIterator.next();
                 episodeListEntry.setType(enclosure.getType());
                 episodeListEntry.setURL(enclosure.getUrl());
             }
-
+*/
             /*for (final Iterator moduleIter = entry.getModules().iterator(); moduleIter.hasNext(); ) {
                 final DCModuleImpl module = (DCModuleImpl) moduleIter.next();
                 SimpleDateFormat originalDateFormat = new SimpleDateFormat("EE MMM dd hh:mm:ss zz yyyy");
