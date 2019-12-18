@@ -36,6 +36,8 @@ public class PodcastFinder{
         }
     }
 
+    public SyndFeed getfeed(){return feed;};
+
     public String getTitle () {
         return feed.getTitle();
     }
@@ -47,6 +49,12 @@ public class PodcastFinder{
     public String getCategory () {
         return feed.getCategories().toString();
     }
+
+    public String getImageUrl(){return feed.getImage().getUrl();}
+    public String getDescription(){return feed.getDescription();}
+
+
+    public String getLangage(){return feed.getLanguage();}
 
 
     public String getForeignElementValue (String el) {
@@ -62,4 +70,5 @@ public class PodcastFinder{
     public List<SyndEntry> getEntries () {
         return feed.getEntries();
     }
+
 }
