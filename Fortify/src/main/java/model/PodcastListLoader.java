@@ -49,8 +49,9 @@ public class PodcastListLoader {
     }
 
     public void addPodcastEntry (RSSItem feed) {
-        podcastEntry.addPodcast(feed.getTitle(), feed.getURL(), feed.getAuthor(), feed.getCategoy(),feed.getAllEpisodes());
+        podcastEntry.addPodcast(feed.getTitle(), feed.getURL(), feed.getAuthor(), feed.getCategoy(), feed.getDescription() , feed.getImageURL(), feed.getLanguage() ,feed.getAllEpisodes());
         updateLocalPodcastData(iTunesFile);
+
     }
 
     public void updateLocalPodcastData (String fileName) {
