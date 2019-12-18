@@ -14,6 +14,13 @@ public interface RSSItem {
 
     public String getAuthor();
 
+    public String getDescription();
+
+
+    public String getLanguage();
+
+    public String getImageURL();
+
     public List<Episode> getAllEpisodes();
 
   //  public String getCategory();
