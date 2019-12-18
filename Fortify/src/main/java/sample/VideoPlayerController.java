@@ -38,25 +38,25 @@ public class VideoPlayerController implements Initializable{
     }
     @FXML
     private void handleButtonAction(ActionEvent event){
+        if(mediaPlayer!=null)
+        mediaPlayer.stop();
         FileChooser filechooser = new FileChooser();
-        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Select a file  (*.mp3)", "*.mp4 ");
+        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Select a file  (*.mp3)", "*.mp3");
         filechooser.getExtensionFilters().add(filter);
         File file = filechooser.showOpenDialog(null);
-        filePath = file.toURI().toString();
 
+        filePath = file.toURI().toString();
         if (filePath != null){
             Media media = new Media(filePath);
             mediaPlayer = new MediaPlayer(media);
             mediaView.setMediaPlayer(mediaPlayer);
-
-            DoubleProperty width = mediaView.fitWidthProperty();
+            /*DoubleProperty width = mediaView.fitWidthProperty();
             DoubleProperty hight = mediaView.fitHeightProperty();
-
             width.bind(Bindings.selectDouble(mediaView.sceneProperty(),"width"));
-            hight.bind(Bindings.selectDouble(mediaView.sceneProperty(),"hight"));
-
-            mediaPlayer.play();
+            hight.bind(Bindings.selectDouble(mediaView.sceneProperty(),"height"));*/
+            mediaPlayer.pause();
         }
+
     }
 
     @FXML
