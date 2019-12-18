@@ -56,13 +56,13 @@ public class SearchView extends BorderPane {
         this.setCenter(logoPart);
         this.setRight(profilBar);
 
-            logoPart.setAlignment(Pos.CENTER);
-            searchField.setAlignment(Pos.CENTER);
-            profilBar.setAlignment(Pos.CENTER_RIGHT);
+        logoPart.setAlignment(Pos.CENTER);
+        searchField.setAlignment(Pos.CENTER);
+        profilBar.setAlignment(Pos.CENTER_RIGHT);
         profilBar.setLayoutX(915);
 
-        this.setWidth(1280);
-        this.setHeight(80);
+        /*this.setWidth(1280);
+        this.setHeight(80);*/
         this.setBackground(new Background(new BackgroundFill(Color.web("#3D4BB3"),new CornerRadii(0),new Insets(0))));
     }
 
