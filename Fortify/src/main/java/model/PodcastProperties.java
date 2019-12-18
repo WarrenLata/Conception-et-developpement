@@ -10,12 +10,28 @@ public class PodcastProperties {
     private String category;
     private List<Episode> episodeList;
     private String imageUrl;
+    private String description;
+    private String language;
     public PodcastProperties () {
 
     }
+
+
+
+
+
+    public void setLanguage(String region){
+        this.language=language;
+    }
+
+
     public void setImageUrl(String imageURL){
         this.imageUrl=imageURL;
     }
+    public void setDescription (String description) {
+        this.description = description;
+    }
+
     public void setTitle (String title) {
         this.title = title;
     }
@@ -26,6 +42,10 @@ public class PodcastProperties {
 
     public String getTitle () {
         return title;
+    }
+
+    public String getLanguage () {
+        return language;
     }
 
     public String getAuthor () {
@@ -48,6 +68,13 @@ public class PodcastProperties {
         return category;
     }
 
+    public String getImageUrl () {
+        return imageUrl;
+    }
+
+    public String getDescription(){
+        return description;
+    }
     public void setEpisodeList (List<Episode> episodes) {
         episodeList = episodes;
     }
