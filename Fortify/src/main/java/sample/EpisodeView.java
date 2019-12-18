@@ -1,6 +1,11 @@
 package sample;
 
+import Misc.ButtonPodDesc;
+import Misc.EcouteurDownload;
 import javafx.beans.value.ChangeListener;
+import javafx.geometry.Insets;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import model.Episode;
 import model.Podcast;
 import com.sun.javafx.font.freetype.HBGlyphLayout;
@@ -14,8 +19,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import model.PodcastApp;
 import model.PodcastProperties;
 
@@ -31,9 +34,9 @@ public class EpisodeView extends VBox implements Observer{
     private ListView<HBox> titreEpisodes = new ListView<HBox>(items);
     private VideoPlayerController video;
     private Label episodesLabel;
-  public void play(VideoPlayerController video, String AudioURL){
-      new VideoPlayerController(AudioURL);
-  }
+    public void play(VideoPlayerController video, String AudioURL){
+        new VideoPlayerController(AudioURL);
+    }
     public EpisodeView(PodcastApp app,VideoPlayerController video) throws FileNotFoundException {
         this.video=video;
         app.addObserver(this);
@@ -42,36 +45,46 @@ public class EpisodeView extends VBox implements Observer{
         episodesLabel.setStyle("-fx-font-size:14px;-fx-text-fill: white;");
         this.episodes=new VBox();
         // background-image:
-        this.episodes.setStyle("-fx-background-color: linear-gradient(to bottom, #1b56af, #1e4f9b, #204888, #234175, #243a62);-fx-border-color:black");
+        //this.episodes.setStyle("-fx-background-color: linear-gradient(to bottom, #1b56af, #1e4f9b, #204888, #234175, #243a62);-fx-border-color:black");
         //episodes.setPrefSize(230,251);
         this.episodes.getChildren().add(episodesLabel);
 
 
+
+
         for(int i=0;i<app.getPodcastChoisi().getEpisodeList().size();i++){
             Episode podcastepisode=app.getPodcastChoisi().getEpisodeList().get(i);
-                HBox episode = new HBox();
-                Button play_btn = new Button("PLAY");
-                Label titre_episode = new Label(podcastepisode.getName());
+            HBox episode = new HBox();
+            Button play_btn = new Button();
+            Button download_btn = new Button();
+            Label titre_episode = new Label(podcastepisode.getName());
+            ImageView playicon= new ImageView(new Image(new FileInputStream("src/main/resources/images/Play-Button-Orange.png")));
+            ImageView downloadicon= new ImageView(new Image(new FileInputStream("src/main/resources/images/Download.png")));
+            downloadicon.setFitHeight(30);
+            downloadicon.setFitWidth(30);
+            download_btn.setGraphic(downloadicon);
+            download_btn.setOnAction(new EcouteurDownload(podcastepisode));
+            playicon.setFitHeight(30);
+            playicon.setFitWidth(30);
+            play_btn.setGraphic(playicon);
+            play_btn.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,new CornerRadii(0),new Insets(0))));
+            download_btn.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,new CornerRadii(0),new Insets(0))));
 
             play_btn.setOnAction(e -> play(video,podcastepisode.getURL()));
-                episode.getChildren().addAll(titre_episode,play_btn);
-
-                items.add(episode);
-
-                //Image image_episode = new Image(new FileInputStream(podcast.episodes.get(i).image));
-                //Button button_play = new Button();
-                /*Image play_image = new Image(new FileInputStream("images/image_app/play-button-transparent.png"));
-                ImageView play_icon = new ImageView(play_image);
-                play_icon.setFitHeight(60);
-                play_icon.setFitWidth(60);*/
-                //ImageView episode_image_view = new ImageView(image_episode);
-                //button_play.setGraphic(play_icon);
-                //episode.getChildren().add(episode_image_view);
-
-                //play_button.getChildren().add(button_play);
 
 
+
+
+            if (i%2==0) {
+                titre_episode.setStyle("-fx-text-fill: black");
+                episode.setStyle("-fx-background-color: #FF9900;");
+            }else {
+                titre_episode.setStyle("-fx-text-fill: orange");
+                episode.setStyle("-fx-background-color: #171717;");
             }
+            episode.getChildren().addAll(titre_episode,play_btn,download_btn);
+            items.add(episode);
+        }
         titreEpisodes.setItems(items);
 
 
@@ -83,7 +96,6 @@ public class EpisodeView extends VBox implements Observer{
         this.getChildren().addAll(episodes);
         //scrollPane.setPrefHeight(581);
         //scrollPane.setPrefWidth(250);
-        titreEpisodes.setPrefSize(350,800);
         episodes.setAlignment(Pos.CENTER);
     }
 
@@ -95,19 +107,47 @@ public class EpisodeView extends VBox implements Observer{
         this.episodesLabel.setText("Episodes of " +podcastchoisi.getTitle());
         System.out.println("Updating Episodes for the selected podcast");
         titreEpisodes.getItems().clear();
-        for(int i=0;i<app.getPodcastChoisi().getEpisodeList().size();i++){
-            Episode podcastepisode=app.getPodcastChoisi().getEpisodeList().get(i);
+        for(int i=0;i<app.getPodcastChoisi().getEpisodeList().size();i++) {
+            Episode podcastepisode = app.getPodcastChoisi().getEpisodeList().get(i);
             HBox episode = new HBox();
-            Button play_btn = new Button("PLAY");
+            Button play_btn = new Button();
+            Button download_btn = new Button();
             Label titre_episode = new Label(podcastepisode.getName());
+            ImageView playicon = null;
+            try {
+                playicon = new ImageView(new Image(new FileInputStream("src/main/resources/images/Play-Button-Orange.png")));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            ImageView downloadicon = null;
+            try {
+                downloadicon = new ImageView(new Image(new FileInputStream("src/main/resources/images/Download.png")));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            download_btn.setOnAction(new EcouteurDownload(podcastepisode));
+            downloadicon.setFitHeight(30);
+            downloadicon.setFitWidth(30);
+            download_btn.setGraphic(downloadicon);
+            playicon.setFitHeight(30);
+            playicon.setFitWidth(30);
+            play_btn.setGraphic(playicon);
+            play_btn.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, new CornerRadii(0), new Insets(0))));
+            download_btn.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, new CornerRadii(0), new Insets(0))));
 
-            play_btn.setOnAction(e -> play(video,podcastepisode.getURL()));
-            episode.getChildren().addAll(titre_episode,play_btn);
+            play_btn.setOnAction(e -> play(video, podcastepisode.getURL()));
+            episode.getChildren().addAll(titre_episode, play_btn, download_btn);
 
             items.add(episode);
 
+            if (i%2==0) {
+                titre_episode.setStyle("-fx-text-fill: black");
+                episode.setStyle("-fx-background-color: #FF9900;");
+            }else {
+                titre_episode.setStyle("-fx-text-fill: orange");
+                episode.setStyle("-fx-background-color: #171717;");
+            }
         }
 
     }
 }
-
