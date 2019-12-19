@@ -27,24 +27,41 @@ package model;
  import org.apache.http.impl.client.HttpClients;
  import java.util.ArrayList;
  import java.util.List;
+import java.lang.Object;
+import java.sql.Timestamp;
 
 
 
 
 public class PodcastApiFetcher {
-    public ArrayList<String> listeRss;
-    public ArrayList<String> listeRSSpopular;
-    public ArrayList<PodcastProperties> listeProperties;
+    private ArrayList<String> listeRss;
+    private ArrayList<String> listeRSSpopular;
+    public ArrayList<PodcastProperties> PPRequestResult;
     public ArrayList<PodcastProperties> listepopular;
 
     public PodcastApiFetcher(){
-
+        this.listeRss=new ArrayList<String>();
+        this.listeRSSpopular=new ArrayList<String>();
+        this.PPRequestResult=new ArrayList<PodcastProperties>();
+        this.listepopular=new ArrayList<PodcastProperties>();
     }
 
-    public ArrayList<String> seacrch(String motcle,String genre,String dateBefor,String dateafter,String language){
-        // ArrayList<String> listeRss= new ArrayList<String>();
+    public ArrayList<PodcastProperties> getPPRequestResult() {
+        return PPRequestResult;
+    }
+
+    public ArrayList<PodcastProperties> getListepopular() {
+        return listepopular;
+    }
+
+
+
+    public ArrayList<String> search(String motcle, String genre, String dateBefore, String dateafter, String language){
+
         String request="https://listen-api.listennotes.com/api/v2/search?q=";
         String cle="";
+        boolean dateBeforeisValid=false;
+        boolean dateAfterisValid=false;
         int j=0;
         for(int i=0;i<motcle.length();i++){
             if(motcle.charAt(i)!=' '){
@@ -54,6 +71,38 @@ public class PodcastApiFetcher {
                 cle=cle+"%20";
             }
         }
+        Timestamp dateBefor=new Timestamp(0);
+        Timestamp dateaftr=new Timestamp(0);
+
+        String[] ParsedDateAfter=dateafter.split("/");
+        if(ParsedDateAfter.length<3){
+            System.out.println("YOU NEED TO HAVE 3 ARGUMENTS");
+        }else{
+            dateAfterisValid=true;
+            dateaftr= new Timestamp(Integer.parseInt(ParsedDateAfter[0]),Integer.parseInt(ParsedDateAfter[1]),Integer.parseInt(ParsedDateAfter[2]),0,0,0,0);
+        }
+
+        String[] ParsedDateBefor=dateafter.split("/");
+        if(ParsedDateAfter.length<3){
+            System.out.println("YOU NEED TO HAVE 3 ARGUMENTS");
+        }else{
+            dateAfterisValid=true;
+            dateBefor= new Timestamp(Integer.parseInt(ParsedDateBefor[0]),Integer.parseInt(ParsedDateBefor[1]),Integer.parseInt(ParsedDateBefor[2]),0,0,0,0);
+        }
+        if(dateafter==""){
+            dateAfterisValid=true;
+            dateaftr=new Timestamp(0);
+        }
+        if(dateBefore==""){
+            dateBeforeisValid=true;
+            dateBefor=new Timestamp(0);
+
+        }
+
+        dateBefore=Long.toString(dateBefor.getTime());
+        dateafter=Long.toString(dateaftr.getTime());
+
+
         System.out.println("cle:" +cle);
         ArrayList<String> liste = new ArrayList<String>();
         if(!genre.equals("")) {
@@ -70,57 +119,101 @@ public class PodcastApiFetcher {
                 //String id=(String) objet.get("name").get;
                 if (THECHOSENONE.contains(genre)) {
                     liste.add(object);
-                    System.out.println(THECHOSENONE.toString());
+                    System.out.println(THECHOSENONE);
                 }
             }
         }
-        if(liste.size()==0){
-            request=request+cle+"&genre_ids="+""+"%2C"+""+"&published_before="+dateBefor+"&published_after="+dateafter+"&language="+language;
+        if(liste.size()==0) {
+
+
+
+            if (dateBeforeisValid == true && dateAfterisValid == true) {
+                request = request + cle + "&genre_ids=" + "" + "%2C" + "" + "&published_before=" + dateafter + "&published_after=" + dateBefore + "&language=" + language;
+            }
+            else{
+                request = request + cle + "&genre_ids=" + "" + "%2C" + "" + "&language=" + language;
+            }
         }
         else{
-            request=request+cle+"&genre_ids="+liste.get(0)+"%2C"+liste.get(0)+"&language="+language;
+            if(dateBeforeisValid == true && dateAfterisValid == true) {
+                request = request + cle + "&genre_ids=" + liste.get(0) + "%2C" + liste.get(0)+"&published_before=" + dateafter + "&published_after=" + dateBefore+"&language=" + language;
+            }
+            else{
+                request = request + cle + "&genre_ids=" + liste.get(0) + "%2C" + liste.get(0)+"&language=" + language;
+            }
         }
         HttpResponse<JsonNode> response4 = Unirest.get(request)
                 .header("X-ListenAPI-Key", "2311beaa41054b63996aa886ce03d339")
                 .asJson();
         int count= (int)response4.getBody().getObject().get("count");
-        for(int i=0;i<count;i++){
-            JSONArray array=(JSONArray)response4.getBody().getObject().get("results");
-            JSONObject objet=(JSONObject)array.get(i);
-            String THECHOSENONE=(String) objet.get("rss");
-            listeRss.add(THECHOSENONE);
-            //System.out.println(THECHOSENONE.toString());
+        for(int i=0;i<count;i++) {
+            JSONArray array = (JSONArray) response4.getBody().getObject().get("results");
+            JSONObject objet = (JSONObject) array.get(i);
+            String THECHOSENONE = (String) objet.get("rss");
+
+            PodcastFinder feeder = new PodcastFinder(THECHOSENONE);
+            if(feeder==null || feeder.getfeed()==null){
+
+                continue;
+            }else {
+                if((feeder.getfeed().getLanguage() == null )&& (feeder.getfeed()==null)  && (feeder.getfeed().getTitle() == null) && (feeder.getfeed().getUri() == null )){
+                    continue;
+                }
+                listeRss.add(THECHOSENONE);
+            }
+
         }
-        // System.out.println(response4.getBody().toString());
         return  listeRss;
     }
 
 
 
-    public ArrayList<String> searchpopular(){
+    public ArrayList<PodcastProperties>searchPopularPodcasts() throws Exception {
+        searchpopular();
+        ArrayList<PodcastProperties> ppd=parsepopular();
+        return ppd;
+    }
+    private ArrayList<String> searchpopular(){
 
         HttpResponse<JsonNode> response4 = Unirest.get("https://listen-api.listennotes.com/api/v2/best_podcasts?genre_ids=02C144&page=2&region=us&safe_mode=1")
                 .header("X-ListenAPI-Key", "2311beaa41054b63996aa886ce03d339")
                 .asJson();
-        int count= (int)response4.getBody().getObject().get("count");
+        System.out.println("JSON BEGIN:"+response4.getBody().toPrettyString()+"\n \nJSON END");
+       // int count= (int)response4.getBody().getObject().get("count");
         JSONArray array= (JSONArray)response4.getBody().getObject().get("podcasts");
+        int counter=0;
+        int i=0;
 
-        for(int i=0;i<5;i++) {
+        int stopper = 0;
+        while (counter<2 && stopper < 60) {
             //JSONArray array=(JSONArray)response4.getBody().getObject().get("results");
             JSONObject objet = (JSONObject) array.get(i);
             String THECHOSENONE = (String) objet.get("rss");
-            listeRSSpopular.add(THECHOSENONE);
-        }
+            PodcastFinder feed = new PodcastFinder(THECHOSENONE);
+            System.out.println("THE CHOSEN ONE IS:"+THECHOSENONE);
+       //     if(feed==null || (feed.getfeed().getLanguage() == null )|| (feed.getfeed()==null) || (feed.getfeed().getAuthor()==null)|| (feed.getfeed().getImage().getUrl() == null) || (feed.getfeed().getDescription() == null) || (feed.getfeed().getTitle() == null) || (feed.getfeed().getLink() == null) ){
+            if(feed==null || (feed.getfeed().getLanguage() == null )|| (feed.getfeed()==null)  || (feed.getfeed().getTitle() == null) || (feed.getfeed().getLink() == null) || (feed.getfeed().getImage().getUrl() == null) ){
+
+                System.out.println("Je suis dana le vide ");
+                continue;
+            }else {
+                listeRSSpopular.add(THECHOSENONE);
+                counter++;
+                System.out.println("This is the title : " + feed.getfeed().getTitle());
+            }
+            i++;
+            }
+        stopper++;
         return  listeRSSpopular;
     }
 
 
 
-    public ArrayList<PodcastProperties> parse() throws Exception {
-        ArrayList<Episode> listeEpisode = new ArrayList<Episode>();
-        for(int i=0;i<listeRss.size();i++){
-            Podcast pod= new Podcast(listeRss.get(i));
-            PodcastFinder pdf = new PodcastFinder(listeRss.get(i));
+    public ArrayList<PodcastProperties> parse(ArrayList<String> listedeflux) throws Exception {
+        for(int i=0;i<listedeflux.size();i++){
+            ArrayList<Episode> listeEpisode = new ArrayList<Episode>();
+            Podcast pod= new Podcast(listedeflux.get(i));
+            PodcastFinder pdf = new PodcastFinder(listedeflux.get(i));
             pod.setFeed(pdf);
             PodcastProperties p= new PodcastProperties();
             p.setLanguage(pdf.getLangage());
@@ -129,17 +222,18 @@ public class PodcastApiFetcher {
             p.setAuthor(pdf.getAuthor());
             for(int j=0;j<pdf.getEntries().size();j++){
                 Episode ep= new Episode();
-                ep.setName(pdf.getEntries().get(i).getTitle());
-                ep.setURL(pdf.getEntries().get(i).getLink());
-                ep.setDescription(pdf.getEntries().get(i).getDescription().getValue());
+                ep.setName(pdf.getEntries().get(j).getTitle());
+                System.out.println("Le titre de l'épisode  : " + pdf.getEntries().get(j).getTitle()+ "du podcast : " + pdf.getTitle() );
+                ep.setURL(pdf.getEntries().get(j).getLink());
+                ep.setDescription(pdf.getEntries().get(j).getDescription().getValue());
               //  ep.setType(pdf.getEntries().get(i).get);
                 listeEpisode.add(ep);
             }
             p.setEpisodeList(listeEpisode);
 
-            listeProperties.add(p);
+            PPRequestResult.add(p);
         }
-        return listeProperties;
+        return PPRequestResult;
     }
 
 
@@ -157,7 +251,7 @@ public class PodcastApiFetcher {
             for(int j=0;j<pdf.getEntries().size();j++){
                 Episode ep= new Episode();
                 ep.setName(pdf.getEntries().get(i).getTitle());
-                ep.setURL(pdf.getEntries().get(i).getLink());
+                ep.setURL(pdf.getEntries().get(i).getEnclosures().get(0).getUrl());
                 ep.setDescription(pdf.getEntries().get(i).getDescription().getValue());
                 //  ep.setType(pdf.getEntries().get(i).get);
                 listeEpisode.add(ep);
