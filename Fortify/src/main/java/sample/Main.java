@@ -29,10 +29,10 @@ public class Main extends Application {
         String current=new File(".").getCanonicalPath();
         System.out.println(current+ " PATH! ");
         PodcastApp pd = new PodcastApp("./src/main/resources");
-        System.out.println("La taille de json : " + pd.getData().size());
-        System.out.println("la catégorie est : " + pd.getData().get(0).getTitle());
-        System.out.println("la catégorie est : " + pd.getData().get(1).getTitle());
-        VBox global_layout = new VBox();
+        System.out.println("La taille de json : " + pd.getPreference().size());
+        System.out.println("la catégorie est : " + pd.getPreference().get(0).getTitle());
+        System.out.println("la catégorie est : " + pd.getPreference().get(1).getTitle());
+        BorderPane global_layout = new BorderPane();
         PodcastsView centre_page = new PodcastsView(pd);
         GridPane main_part = new GridPane();
         VBox favoris = new VBox();
@@ -40,7 +40,7 @@ public class Main extends Application {
         //String title, int nombreEpisodes,ArrayList<Episode> episodes, String description
         // String url,String title,String image,String description
         SearchView searchBar = new SearchView();
-        global_layout.getChildren().add(searchBar);
+        global_layout.setTop(searchBar);
         primaryStage.setTitle("FORTIFY");
         primaryStage.setScene(new Scene(global_layout, 1280, 800));
         //global_layout.getChildren().add(searchBar);
@@ -93,7 +93,7 @@ public class Main extends Application {
         main_part.setPadding(new Insets(20));
         main_part.setStyle("    -fx-pref-height: 500;" +
                 "    -fx-pref-width: 1000;");
-        global_layout.getChildren().add(main_part);
+        global_layout.setCenter(main_part);
         main_part.setHgap(10);
         /*
         centre_page.getChildren().add(favoris);
@@ -117,14 +117,23 @@ public class Main extends Application {
         Parent player = FXMLLoader.load(getClass().getResource("sample.fxml"));
         //  primaryStage.setTitle("Hello World");
         //primaryStage.setScene(new Scene(root));
-        global_layout.getChildren().add(player);
+        global_layout.setBottom(player);
+        global_layout.setLeft(new AccessView(pd));
 
         primaryStage.show();
     }
 
 
 
-    public static void main(String[] args) {
-        launch(args);
+   /* public static void main(String[] args) throws Exception {
+
+        PodcastListLoader podcastData = new PodcastListLoader("/home/walid/Bureau/Fruitify");
+        Podcast pod= new Podcast("https://rss.art19.com/levar-burton-reads");
+        pod.loadFeed("https://rss.art19.com/levar-burton-reads");
+        podcastData.addPodcastEntry(pod);
+
+    }*/
+   public static void main(String[] args) {
+       launch(args);
     }
 }
