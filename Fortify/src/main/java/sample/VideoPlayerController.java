@@ -28,24 +28,25 @@ public class VideoPlayerController implements Initializable{
 
     }
     public VideoPlayerController(String filePath){
-            if (media!=null) {
-                mediaPlayer.stop();
-            }
-            media = new Media(filePath);
-            this.filePath=filePath;
-            mediaPlayer=new MediaPlayer(media);
+        if (media!=null) {
+            mediaPlayer.stop();
+        }
+        media = new Media(filePath);
+        this.filePath=filePath;
+        mediaPlayer=new MediaPlayer(media);
 
     }
     @FXML
     private void handleButtonAction(ActionEvent event){
         if(mediaPlayer!=null)
-        mediaPlayer.stop();
+            mediaPlayer.stop();
         FileChooser filechooser = new FileChooser();
         FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Select a file  (*.mp3)", "*.mp3");
         filechooser.getExtensionFilters().add(filter);
         File file = filechooser.showOpenDialog(null);
 
-        filePath = file.toURI().toString();
+       // filePath = file.toURI().toString();
+        filePath="http://www.wbur.org/modernlove/2018/02/28/from-he-to-she-in-first-grade-beals-frankel";
         if (filePath != null){
             Media media = new Media(filePath);
             mediaPlayer = new MediaPlayer(media);
