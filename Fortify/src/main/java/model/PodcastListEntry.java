@@ -8,6 +8,12 @@ import java.util.List;
 public class PodcastListEntry {
     public ArrayList<PodcastProperties> podcasts;
 
+    public PodcastListEntry(ArrayList<PodcastProperties> liste){
+        podcasts = liste;
+    }
+    public PodcastListEntry(){
+    }
+
     public ArrayList<PodcastProperties> getProperties () {
         return podcasts;
     }
