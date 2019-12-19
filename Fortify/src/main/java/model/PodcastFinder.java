@@ -23,13 +23,13 @@ public class PodcastFinder{
         try {
             targetURL = new URL(rssURL);
             SyndFeedInput input = new SyndFeedInput();
-
+            System.out.println("before the error"+rssURL);
             try {
                 feed = input.build(new XmlReader(targetURL));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             } catch (com.rometools.rome.io.FeedException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
