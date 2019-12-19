@@ -35,6 +35,7 @@ public class EpisodeView extends VBox implements Observer{
     private VideoPlayerController video;
     private Label episodesLabel;
     public void play(VideoPlayerController video, String AudioURL){
+
         new VideoPlayerController(AudioURL);
     }
     public EpisodeView(PodcastApp app,VideoPlayerController video) throws FileNotFoundException {
@@ -105,8 +106,9 @@ public class EpisodeView extends VBox implements Observer{
         PodcastApp app=((PodcastApp) o);
         PodcastProperties podcastchoisi=app.getPodcastChoisi();
         this.episodesLabel.setText("Episodes of " +podcastchoisi.getTitle());
-        System.out.println("Updating Episodes for the selected podcast");
+        System.out.println("Updating Episodes for the selected podcast"+podcastchoisi.toString());
         titreEpisodes.getItems().clear();
+        System.out.println(app.getPodcastChoisi().getEpisodeList().size());
         for(int i=0;i<app.getPodcastChoisi().getEpisodeList().size();i++) {
             Episode podcastepisode = app.getPodcastChoisi().getEpisodeList().get(i);
             HBox episode = new HBox();
