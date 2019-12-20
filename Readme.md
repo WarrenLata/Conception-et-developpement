@@ -1,5 +1,4 @@
 
-
 Release Day 1:
  * Mise en place de la vue principale
  * Recherche d'un flux RSS et sur le parsing du XML correspondant
@@ -32,3 +31,14 @@ Release Day 4:
  * Ajout de la fonctionalité 'ajouter' ou 'supprimer' des podcasts dans la liste de préférence.
  * Ajout de la fonctionalité mediaplayer d'un épisode d'un podcast (barre d'avancement de la vidéo + slider pour controler le son. );
  
+
+Release Final:
+ * Amélioration des interfaces pour une meilleur visualisation. 
+ * Correction des derniers bugs de  l'application (affichage inutile, réduction du tempsd'éxécution . 
+ * Ajout d'un média player interactif pour la lecture des audios et videos
+ 
+
+Lancement:
+ 
+ Notre application est munie d'un gradle. Pour la runner  il suffit donc soit de faire un ./gradlew run dans le répertoire de notre application Fortify. Ou lancer le jar déposé sur le git avec la commande java -jar Fortify.jar
+
