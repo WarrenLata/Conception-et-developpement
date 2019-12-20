@@ -40,7 +40,6 @@ public class PodcastListLoader {
             }
 
         } catch (IOException ex) {
-            System.out.println("Error reading file '" + configPath + "/" + fileName);
         }
     }
 
@@ -63,7 +62,6 @@ public class PodcastListLoader {
             listeToappend.add(podcastEntry.getProperties().get(a-1));
             PodcastListEntry podacstor = new PodcastListEntry(listeToappend);
             String json = gson.toJson(podacstor);
-            System.out.println("this is the size that we're going to add Using the method updateLocalPOdcastData :"+ podcastEntry.getProperties().size());
             FileWriter writer = new FileWriter(configPath + "/" + fileName,true);
             writer.write(json);
             writer.close();

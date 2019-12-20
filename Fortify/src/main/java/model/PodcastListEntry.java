@@ -22,27 +22,19 @@ public class PodcastListEntry {
       //  podcasts=new ArrayList<PodcastProperties>();
         PodcastProperties prop = new PodcastProperties();
         prop.setTitle(title);
-        System.out.println("Titre "+title);
         prop.setURL(URL);
-        System.out.println("URL "+title);
 
         prop.setAuthor(author);
-        System.out.println("author "+title);
 
         prop.setDescription(desciption);
-        System.out.println("description "+title);
 
         prop.setImageUrl(imageURL);
-        System.out.println("imageURL "+title);
 
         prop.setLanguage(language);
-        System.out.println("language "+title);
 
         prop.setEpisodeList(episodes);
-        System.out.println("episodes "+title);
 
         podcasts.add(prop);
-        System.out.println("Aadd sort");
     }
 
     public void removePodcast (int index) {

@@ -83,7 +83,6 @@ public class Podcast implements RSSItem{
     public void loadFeed(String URL) throws Exception {
         feed = new PodcastFinder(URL);
         title = feed.getTitle();
-        System.out.println("feed title"+feed.getTitle());
         author = feed.getForeignElementValue("author");
         imageURL=feed.getImageUrl();
         description=feed.getDescription();
@@ -116,12 +115,7 @@ public class Podcast implements RSSItem{
 
 
             if ((episodeListEntry != null) && (episodeListEntry.getURL() != null) && (episodeListEntry.getName() != null)) {
-                  System.out.println("il et là : desription  : " + episodeListEntry.getDescription());
-                  System.out.println("il et là : URL 2 : " + entry.getEnclosures().get(0).getUrl());
-                 // System.out.println("il et là : URL 2 : " + entry.getEnclosures().get(1).getUrl());
 
-                  System.out.println("il et là : Le titre de l'épisode :" + episodeListEntry.getName());
-                  System.out.println("il et là : La date de l'épisode " + episodeListEntry.getDate());
 
                   episodeListEntryList.add(episodeListEntry);
 

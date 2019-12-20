@@ -55,6 +55,7 @@ public class PodcastApp extends Observable{
         PodcastListLoader podcastPreference = new PodcastListLoader(configpath);
         PodcastListEntry pd = new PodcastListEntry(preference);
         podcastPreference.ClearAndSave(datajsonfile,pd);
+        System.out.println("DONE SAVING");
        // ClearAndSave
         preference.clear();
 
@@ -63,6 +64,7 @@ public class PodcastApp extends Observable{
 
 
     public void FilterPodcast(String motcle, String genre, String dateBefore,String dateAfter,String language) throws Exception {
+        requested.clear();
         PodcastApiFetcher Fetcher=new PodcastApiFetcher();
         ArrayList<String> rsslist=Fetcher.search(motcle,genre,dateBefore,dateAfter,language);
         ArrayList<PodcastProperties> test = Fetcher.parse(rsslist);

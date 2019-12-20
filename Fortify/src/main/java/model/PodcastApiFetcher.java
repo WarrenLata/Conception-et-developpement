@@ -79,7 +79,8 @@ public class PodcastApiFetcher {
             System.out.println("YOU NEED TO HAVE 3 ARGUMENTS");
         }else{
             dateAfterisValid=true;
-            dateaftr= new Timestamp(Integer.parseInt(ParsedDateAfter[0]),Integer.parseInt(ParsedDateAfter[1]),Integer.parseInt(ParsedDateAfter[2]),0,0,0,0);
+
+            dateaftr= new Timestamp(Integer.parseInt(ParsedDateAfter[2]),Integer.parseInt(ParsedDateAfter[1]),Integer.parseInt(ParsedDateAfter[0]),0,0,0,0);
         }
 
         String[] ParsedDateBefor=dateafter.split("/");
@@ -87,7 +88,7 @@ public class PodcastApiFetcher {
             System.out.println("YOU NEED TO HAVE 3 ARGUMENTS");
         }else{
             dateAfterisValid=true;
-            dateBefor= new Timestamp(Integer.parseInt(ParsedDateBefor[0]),Integer.parseInt(ParsedDateBefor[1]),Integer.parseInt(ParsedDateBefor[2]),0,0,0,0);
+            dateBefor= new Timestamp(Integer.parseInt(ParsedDateBefor[2]),Integer.parseInt(ParsedDateBefor[1]),Integer.parseInt(ParsedDateBefor[0]),0,0,0,0);
         }
         if(dateafter==""){
             dateAfterisValid=true;
@@ -126,7 +127,6 @@ public class PodcastApiFetcher {
         if(liste.size()==0) {
 
 
-
             if (dateBeforeisValid == true && dateAfterisValid == true) {
                 request = request + cle + "&genre_ids=" + "" + "%2C" + "" + "&published_before=" + dateafter + "&published_after=" + dateBefore + "&language=" + language;
             }
@@ -146,6 +146,7 @@ public class PodcastApiFetcher {
                 .header("X-ListenAPI-Key", "2311beaa41054b63996aa886ce03d339")
                 .asJson();
         int count= (int)response4.getBody().getObject().get("count");
+        int limit=0;
         for(int i=0;i<count;i++) {
             JSONArray array = (JSONArray) response4.getBody().getObject().get("results");
             JSONObject objet = (JSONObject) array.get(i);
@@ -159,7 +160,14 @@ public class PodcastApiFetcher {
                 if((feeder.getfeed().getLanguage() == null )&& (feeder.getfeed()==null)  && (feeder.getfeed().getTitle() == null) && (feeder.getfeed().getUri() == null )){
                     continue;
                 }
-                listeRss.add(THECHOSENONE);
+                limit++;
+                if(limit<=10){
+                    listeRss.add(THECHOSENONE);
+                }
+                //listeRss.add(THECHOSENONE);
+                else{
+                    break;
+                }
             }
 
         }
@@ -178,32 +186,31 @@ public class PodcastApiFetcher {
         HttpResponse<JsonNode> response4 = Unirest.get("https://listen-api.listennotes.com/api/v2/best_podcasts?genre_ids=02C144&page=2&region=us&safe_mode=1")
                 .header("X-ListenAPI-Key", "2311beaa41054b63996aa886ce03d339")
                 .asJson();
-        System.out.println("JSON BEGIN:"+response4.getBody().toPrettyString()+"\n \nJSON END");
        // int count= (int)response4.getBody().getObject().get("count");
         JSONArray array= (JSONArray)response4.getBody().getObject().get("podcasts");
         int counter=0;
         int i=0;
 
         int stopper = 0;
-        while (counter<2 && stopper < 60) {
+        while (counter<3 && stopper < 5) {
             //JSONArray array=(JSONArray)response4.getBody().getObject().get("results");
             JSONObject objet = (JSONObject) array.get(i);
             String THECHOSENONE = (String) objet.get("rss");
             PodcastFinder feed = new PodcastFinder(THECHOSENONE);
-            System.out.println("THE CHOSEN ONE IS:"+THECHOSENONE);
        //     if(feed==null || (feed.getfeed().getLanguage() == null )|| (feed.getfeed()==null) || (feed.getfeed().getAuthor()==null)|| (feed.getfeed().getImage().getUrl() == null) || (feed.getfeed().getDescription() == null) || (feed.getfeed().getTitle() == null) || (feed.getfeed().getLink() == null) ){
             if(feed==null || (feed.getfeed().getLanguage() == null )|| (feed.getfeed()==null)  || (feed.getfeed().getTitle() == null) || (feed.getfeed().getLink() == null) || (feed.getfeed().getImage().getUrl() == null) ){
 
-                System.out.println("Je suis dana le vide ");
+                stopper++;
                 continue;
             }else {
                 listeRSSpopular.add(THECHOSENONE);
                 counter++;
-                System.out.println("This is the title : " + feed.getfeed().getTitle());
+                stopper++;
             }
             i++;
-            }
-        stopper++;
+
+
+        }
         return  listeRSSpopular;
     }
 
@@ -220,14 +227,20 @@ public class PodcastApiFetcher {
             p.setImageUrl(pdf.getImageUrl());
             p.setDescription(pdf.getDescription());
             p.setAuthor(pdf.getAuthor());
+            int count=50;
             for(int j=0;j<pdf.getEntries().size();j++){
                 Episode ep= new Episode();
                 ep.setName(pdf.getEntries().get(j).getTitle());
-                System.out.println("Le titre de l'épisode  : " + pdf.getEntries().get(j).getTitle()+ "du podcast : " + pdf.getTitle() );
-                ep.setURL(pdf.getEntries().get(j).getLink());
+                ep.setURL(pdf.getEntries().get(j).getEnclosures().get(0).getUrl());
                 ep.setDescription(pdf.getEntries().get(j).getDescription().getValue());
               //  ep.setType(pdf.getEntries().get(i).get);
-                listeEpisode.add(ep);
+                if(j<count){
+                    listeEpisode.add(ep);
+                }
+                else{
+                    break;
+                }
+                //listeEpisode.add(ep);
             }
             p.setEpisodeList(listeEpisode);
 
@@ -238,8 +251,8 @@ public class PodcastApiFetcher {
 
 
     public ArrayList<PodcastProperties> parsepopular() throws Exception {
-        ArrayList<Episode> listeEpisode = new ArrayList<Episode>();
         for(int i=0;i<listeRSSpopular.size();i++){
+            ArrayList<Episode> listeEpisode = new ArrayList<Episode>();
             Podcast pod= new Podcast(listeRSSpopular.get(i));
             PodcastFinder pdf = new PodcastFinder(listeRSSpopular.get(i));
             pod.setFeed(pdf);
@@ -248,13 +261,20 @@ public class PodcastApiFetcher {
             p.setImageUrl(pdf.getImageUrl());
             p.setDescription(pdf.getDescription());
             p.setAuthor(pdf.getAuthor());
+            int count=50;
             for(int j=0;j<pdf.getEntries().size();j++){
                 Episode ep= new Episode();
                 ep.setName(pdf.getEntries().get(i).getTitle());
                 ep.setURL(pdf.getEntries().get(i).getEnclosures().get(0).getUrl());
                 ep.setDescription(pdf.getEntries().get(i).getDescription().getValue());
                 //  ep.setType(pdf.getEntries().get(i).get);
-                listeEpisode.add(ep);
+                if(j<count){
+                    listeEpisode.add(ep);
+                }
+              //  listeEpisode.add(ep);
+                else{
+                    break;
+                }
             }
             p.setEpisodeList(listeEpisode);
 
