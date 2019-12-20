@@ -1,4 +1,20 @@
 
+Projet de PCD 2019.
+
+
+
+
+Membres du groupe : 
+
+FAZOUANE Souhail
+REHIOUI Walid
+HMUZA Jaber 
+LATA Warren
+
+
+
+
+
 Release Day 1:
  * Mise en place de la vue principale
  * Recherche d'un flux RSS et sur le parsing du XML correspondant
@@ -40,5 +56,5 @@ Release Final:
 
 Lancement:
  
- Notre application est munie d'un gradle. Pour la runner  il suffit donc soit de faire un ./gradlew run dans le répertoire de notre application Fortify. Ou lancer le jar déposé sur le git avec la commande java -jar Fortify.jar
+ Notre application est munie d'un gradle. Pour la runner il suffit donc soit de faire un ./gradlew run dans le répertoire de notre application Fortify. Ou lancer le jar déposé sur le git avec la commande java -jar Fortify.jar
 
