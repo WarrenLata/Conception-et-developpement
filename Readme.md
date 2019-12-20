@@ -57,4 +57,6 @@ Lancement:
  
  Notre application est munie d'un gradle. Pour la runner il suffit donc soit de faire un ./gradlew run dans le répertoire de notre application Fortify(cd Fortify). Ou lancer le jar déposé sur le git avec la commande java -jar PodcastApp-Fortify.jar
 
- Ou de faire un ./gradlew jar et lancer par la suite java -jar /build/libs/PodcastApp-Fortify.jar
+ Ou de faire un ./gradlew jar et lancer par la suite java -jar /build/libs/PodcastApp-Fortify.jar.
+ 
+ Commentaire: POur faire une recherche sur l'application il faut obligatoirement spécifier un mot-clé(qui peut s'apparenter à un theme,une personne, un sujet etc...)
