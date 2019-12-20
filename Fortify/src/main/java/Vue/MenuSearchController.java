@@ -46,14 +46,12 @@ public class MenuSearchController implements Initializable,ControlledScreen {
     public void goToPODCASTLISTActualite(ActionEvent event){
 
         myController.updatePodcastListActualite(Main.screenPODID, Main.screenPODFile,podcastApp);
-        System.out.println("POINT1");
         myController.setScreen(Main.screenPODID);
     }
     @FXML
     public void goToPODCASTLISTPreference(ActionEvent event){
 
         myController.updatePodcastListPreference(Main.screenPODID, Main.screenPODFile,podcastApp);
-        System.out.println("POINT1");
         myController.setScreen(Main.screenPODID);
     }
     @FXML
@@ -61,8 +59,6 @@ public class MenuSearchController implements Initializable,ControlledScreen {
 
         podcastApp.FilterPodcast(keyword.getText(),categorie.getText(),dateavant.getText(),dateapres.getText(),langue.getText());
         myController.updatePodcastListRequested(Main.screenPODID, Main.screenPODFile,podcastApp);
-        System.out.println("the url of the fucking episode  : "+ podcastApp.getRequested().get(0).getEpisodeList().get(0).getURL());
-        System.out.println("POINT1");
         myController.setScreen(Main.screenPODID);
     }
 }

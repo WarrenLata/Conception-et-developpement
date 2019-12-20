@@ -28,7 +28,6 @@ public class PodcastFinder{
             } catch (IOException e) {
                 throw new RuntimeException(e);
             } catch (com.rometools.rome.io.FeedException e) {
-                e.printStackTrace();
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

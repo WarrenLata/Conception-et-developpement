@@ -80,14 +80,15 @@ public class Podcast implements RSSItem{
         return episodes;
     }
 
-    public void loadFeed(String URL) throws Exception {
-        feed = new PodcastFinder(URL);
-        title = feed.getTitle();
-        author = feed.getForeignElementValue("author");
-        imageURL=feed.getImageUrl();
-        description=feed.getDescription();
-        language=feed.getLangage();
-        episodes = getEntriesTitles();
+    public void loadFeed(String URL) throws Exception{
+            feed = new PodcastFinder(URL);
+            title = feed.getTitle();
+            author = feed.getForeignElementValue("author");
+            imageURL = feed.getImageUrl();
+            description = feed.getDescription();
+            language = feed.getLangage();
+            episodes = getEntriesTitles();
+
 
     }
 
