@@ -7,7 +7,7 @@ Membres du groupe :
 
 FAZOUANE Souhail
 REHIOUI Walid
-HMUZA Jaber 
+HMIZA Jaber 
 LATA Warren
 
 
