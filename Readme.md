@@ -62,3 +62,7 @@ Lancement:
 Ou de lancer ./gradlew run
  
  Commentaire: Pour faire une recherche sur l'application il faut obligatoirement spécifier un mot-clé(qui peut s'apparenter à un theme,une personne, un sujet etc...)
+ 
+ 
+ Lien de la viédo de présentation : 
+ https://www.youtube.com/watch?v=QTEYkmCvahA
